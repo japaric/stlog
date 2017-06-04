@@ -1,0 +1,10 @@
+[package]
+authors = ["Jorge Aparicio <jorge@japaric.io>"]
+categories = ["development-tools::debugging", "embedded", "no-std"]
+description = "Lightweight logging framework for resource constrained devices"
+documentation = "https://docs.rs/stlog"
+keywords = ["log", "debuginfo", "ELF"]
+license = "MIT OR Apache-2.0"
+name = "stlog"
+repository = "https://github.com/japaric/stlog"
+version = "0.1.0"
