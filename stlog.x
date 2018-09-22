@@ -1,24 +1,27 @@
 SECTIONS
 {
   .stlog 0 (INFO) : {
-    _sstlog_trace = .;
-    *(.stlog.trace*);
-    _estlog_trace = .;
+    __stlog_error_start__ = .;
+    *(.stlog.error);
+    __stlog_error_end__ = .;
 
-    _sstlog_debug = .;
-    *(.stlog.debug*);
-    _estlog_debug = .;
+    __stlog_warn_start__ = .;
+    *(.stlog.warn);
+    __stlog_warn_end__ = .;
 
-    _sstlog_info = .;
-    *(.stlog.info*);
-    _estlog_info = .;
+    __stlog_info_start__ = .;
+    *(.stlog.info);
+    __stlog_info_end__ = .;
 
-    _sstlog_warn = .;
-    *(.stlog.warn*);
-    _estlog_warn = .;
+    __stlog_debug_start__ = .;
+    *(.stlog.debug);
+    __stlog_debug_end__ = .;
 
-    _sstlog_error = .;
-    *(.stlog.error*);
-    _estlog_error = .;
+    __stlog_trace_start__ = .;
+    *(.stlog.trace);
+    __stlog_trace_end__ = .;
   }
 }
+
+ASSERT(__stlog_trace_end__ < 256, "
+ERROR(stlog): stlog only supports up to 256 different strings at the moment.");
