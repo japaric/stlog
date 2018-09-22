@@ -1,17 +1,14 @@
-use std::env;
-use std::fs::File;
-use std::io::Write;
-use std::path::PathBuf;
+extern crate failure;
 
-fn main() {
+use std::{env, fs::File, io::Write, path::PathBuf};
+
+fn main() -> Result<(), failure::Error> {
     // Put the linker script somewhere the linker can find it
-    let out = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
-    File::create(out.join("stlog.x"))
-        .unwrap()
-        .write_all(include_bytes!("stlog.x"))
-        .unwrap();
+    let out = PathBuf::from(env::var("OUT_DIR")?);
+
+    File::create(out.join("stlog.x"))?.write_all(include_bytes!("stlog.x"))?;
+
     println!("cargo:rustc-link-search={}", out.display());
 
-    println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=stlog.x");
+    Ok(())
 }

@@ -1,10 +1,35 @@
 [package]
 authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["development-tools::debugging", "embedded", "no-std"]
-description = "Lightweight logging framework for resource constrained devices"
+description = "Ultra lightweight logging framework for resource constrained devices"
 documentation = "https://docs.rs/stlog"
-keywords = ["log", "symtab", "ELF"]
+keywords = ["ELF", "symtab"]
 license = "MIT OR Apache-2.0"
 name = "stlog"
 repository = "https://github.com/japaric/stlog"
-version = "0.2.0"
+version = "0.3.0"
+
+[features]
+# these features control which log levels are enabled when debug-assertions are
+# ENABLED, which is the default for the dev profile
+max-level-off = []     # everything is disabled
+max-level-error = []   # on: error
+max-level-warning = [] # on: error and warning
+max-level-info = []    # on: error, warning and info
+max-level-debug = []   # on: error, warning, info and debug
+max-level-trace = []   # on: all levels
+
+# likewise but when debug-assertions are DISABLED, which is the default for the
+# release profile
+release-max-level-off = []     # everything is disabled
+release-max-level-error = []   # on: error
+release-max-level-warning = [] # on: error and warning
+release-max-level-info = []    # on: error, warning and info
+release-max-level-debug = []   # on: error, warning, info and debug
+release-max-level-trace = []   # on: all levels
+
+[build-dependencies]
+failure = "0.1.2"
+
+[dependencies]
+stlog-macros = { path = "macros", version = "0.1.0" }
