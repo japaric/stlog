@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `stlog` crate."><meta name="keywords" content="rust, rustlang, rust-lang, stlog"><title>stlog - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate stlog</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#macros">Macros</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'stlog', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/stlog/lib.rs.html#1-449' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>stlog</a></span></h1><div class='docblock'><p>Ultra lightweight logging framework for resource constrained devices</p>
+<p><img src="https://i.imgur.com/rPxmAlZ.jpg" alt="stlog running on a Cortex-M microcontroller" /></p>
+<p><strong><a href="https://streamable.com/nmlx7">See stlog in action!</a></strong></p>
+<h1 id="features" class="section-header"><a href="#features">Features</a></h1>
+<ul>
+<li>
+<p><code>O(1)</code> execution time. Logging a message of arbitrary size is done in a constant number of
+instructions.</p>
+</li>
+<li>
+<p><code>O(0)</code> memory usage. The messages are NOT stored in the target device memory.</p>
+</li>
+<li>
+<p>Supports different logging levels: error, warning, info, debug and trace, in decreasing level
+of severity. By default, the <code>dev</code> profile logs debug, and more severe, messages and the
+<code>release</code> profile logs info, and more severe, messages, but this can changed using the Cargo
+features of this crate.</p>
+</li>
+<li>
+<p>Provides a global logging mode</p>
+</li>
+</ul>
+<h1 id="non-features" class="section-header"><a href="#non-features">Non-features</a></h1>
+<ul>
+<li><code>printf</code> style or any other kind of formatting</li>
+</ul>
+<h1 id="known-limitations" class="section-header"><a href="#known-limitations">Known limitations</a></h1>
+<ul>
+<li>
+<p>The current implementation only supports 256 different log strings. This restriction may be
+lifted in the future.</p>
+</li>
+<li>
+<p>The exact same string can't be used in two or more macro invocations. This restriction will be
+lifted when procedural macros that expand into expressions are allowed on stable.</p>
+</li>
+</ul>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<span class="kw">use</span> <span class="ident">stlog</span>::{<span class="ident">error</span>, <span class="ident">info</span>};
+
+<span class="kw">fn</span> <span class="ident">foo</span>() {
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Hello!&quot;</span>);
+}
+
+<span class="kw">fn</span> <span class="ident">good</span>() {
+    <span class="ident">foo</span>();
+    <span class="ident">foo</span>();
+}
+
+<span class="kw">fn</span> <span class="ident">bad</span>() {
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Hey!&quot;</span>);
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Hey!&quot;</span>); <span class="comment">//~ ERROR symbol `Hey!` is already defined</span>
+}
+
+<span class="kw">fn</span> <span class="ident">also_bad</span>() {
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Bye!&quot;</span>);
+    <span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Bye!&quot;</span>); <span class="comment">//~ ERROR symbol `Bye!` is already defined</span>
+}</pre>
+<h1 id="requirements" class="section-header"><a href="#requirements">Requirements</a></h1>
+<p>The target application must be linked using the <code>stlog.x</code> linker script provided by this crate.
+The easiest way to do this is to append the <code>-C link-arg</code> to the other rustc flags using a Cargo
+configuration file (<code>.cargo/config</code>).</p>
+<pre><code class="language-toml">[target.thumbv7m-none-eabi]
+rustflags = [
+    &quot;-C&quot;, &quot;link-arg=-Tstlog.x&quot;,
+    # ..
+]
+</code></pre>
+<p>To decode the logs on the host you'll need version v0.2.x of the <a href="https://crates.io/crates/stcat"><code>stcat</code></a> tool.</p>
+<h1 id="example" class="section-header"><a href="#example">Example</a></h1><h2 id="local-logger" class="section-header"><a href="#local-logger">Local logger</a></h2>
+<ul>
+<li>Device side</li>
+</ul>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">stlog</span>;
+
+<span class="kw">use</span> <span class="ident">stlog</span>::{<span class="ident">info</span>, <span class="ident">warn</span>, <span class="ident">Log</span>};
+
+<span class="kw">struct</span> <span class="ident">Logger</span> {
+    <span class="comment">// ..</span>
+}
+
+<span class="kw">impl</span> <span class="ident">Log</span> <span class="kw">for</span> <span class="ident">Logger</span> {
+    <span class="comment">// ..</span>
+}
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">Logger</span> {
+        <span class="comment">// ..</span>
+    };
+
+    <span class="macro">info</span><span class="macro">!</span>(<span class="ident">logger</span>, <span class="string">&quot;Hello, world!&quot;</span>);
+    <span class="macro">warn</span><span class="macro">!</span>(<span class="ident">logger</span>, <span class="string">&quot;The quick brown fox jumps over the lazy dog&quot;</span>);
+}</pre>
+<ul>
+<li>Host side</li>
+</ul>
+<p>Assuming that the device is <code>log</code>ging through the <code>/dev/ttyUSB0</code> interface.</p>
+<pre><code class="language-text">$ flash-and-run /path/to/device/binary
+
+$ cat /dev/ttyUSB0 | stcat -e /path/to/device/binary
+Sept 22 13:00:00.000 INFO Hello, world!
+Sept 22 13:00:00.001 WARN The quick brown fox jumps over the lazy dog
+</code></pre>
+<h2 id="global-logger" class="section-header"><a href="#global-logger">Global logger</a></h2>
+<p>If the first argument is omitted from the logging macros then logging will be done through the
+global logger. The global logger must be selected using the <code>global_logger</code> attribute <em>in the
+top crate</em>.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<span class="kw">use</span> <span class="ident">stlog</span>::{<span class="ident">info</span>, <span class="ident">GlobalLog</span>};
+
+<span class="kw">struct</span> <span class="ident">Logger</span>;
+
+<span class="kw">impl</span> <span class="ident">GlobalLog</span> <span class="kw">for</span> <span class="ident">Logger</span> { .. }
+
+<span class="attribute">#[<span class="ident">global_logger</span>]</span>
+<span class="kw">static</span> <span class="ident">LOGGER</span>: <span class="ident">Logger</span> <span class="op">=</span> <span class="ident">Logger</span>;
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Hello&quot;</span>);
+}
+
+<span class="attribute">#[<span class="ident">interrupt</span>]</span>
+<span class="kw">fn</span> <span class="ident">SomeInterrupt</span>() {
+    <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;World&quot;</span>);
+}</pre>
+<h1 id="troubleshooting" class="section-header"><a href="#troubleshooting">Troubleshooting</a></h1><h2 id="didnt-pass--tstlogx-to-the-linker" class="section-header"><a href="#didnt-pass--tstlogx-to-the-linker">Didn't pass <code>-Tstlog.x</code> to the linker</a></h2>
+<p>Symptom: you'll get an error when linking the target application or when calling <code>stcat</code>.</p>
+<pre><code class="language-text">$ cargo build
+error: linking with `rust-lld` failed: exit code: 1
+  |
+  = note: &quot;rust-lld&quot; (..)
+  = note: rust-lld: error: no memory region specified for section '.stlog.info'
+          rust-lld: error: no memory region specified for section '.stlog.error'
+
+$ stcat -e /path/to/binary logfile
+error: symbol `__stlog_error_start__` not found
+</code></pre>
+<p>Pass <code>-Tstlog.x</code> to the linker as explained in the requirements section.</p>
+<h2 id="didnt-set-a-global_logger" class="section-header"><a href="#didnt-set-a-global_logger">Didn't set a <code>global_logger</code></a></h2>
+<p>Symptom: you'll get an error when linking the program</p>
+<pre><code class="language-text">$ cargo build
+error: linking with `rust-lld` failed: exit code: 1
+  |
+  = note: &quot;rust-lld&quot; (..)
+  = note: rust-lld: error: undefined symbol: stlog::GLOBAL_LOGGER
+</code></pre>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub use stlog_macros::<a class="macro" href="../stlog_macros/fn.global_logger.html" title="macro stlog_macros::global_logger">global_logger</a>;</code></td></tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.debug.html"
+                                  title='macro stlog::debug'>debug</a></td>
+                           <td class='docblock-short'>
+                                <p>Logs the given string literal at the DEBUG log level</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.error.html"
+                                  title='macro stlog::error'>error</a></td>
+                           <td class='docblock-short'>
+                                <p>Logs the given string literal at the ERROR log level</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.info.html"
+                                  title='macro stlog::info'>info</a></td>
+                           <td class='docblock-short'>
+                                <p>Logs the given string literal at the INFO log level</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.trace.html"
+                                  title='macro stlog::trace'>trace</a></td>
+                           <td class='docblock-short'>
+                                <p>Logs the given string literal at the TRACE log level</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="macro" href="macro.warn.html"
+                                  title='macro stlog::warn'>warn</a></td>
+                           <td class='docblock-short'>
+                                <p>Logs the given string literal at the WARNING log level</p>
+
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.GlobalLog.html"
+                                  title='trait stlog::GlobalLog'>GlobalLog</a></td>
+                           <td class='docblock-short'>
+                                <p>A global version of the <a href="trait.Log"><code>Log</code></a> trait</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.Log.html"
+                                  title='trait stlog::Log'>Log</a></td>
+                           <td class='docblock-short'>
+                                <p>A logger that encodes messages using a symbol table</p>
+
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "stlog";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["global_logger","An attribute to declare a global logger"]]});
