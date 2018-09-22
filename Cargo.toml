@@ -33,3 +33,6 @@ failure = "0.1.2"
 
 [dependencies]
 stlog-macros = { path = "macros", version = "0.1.0" }
+
+[workspace]
+members = ["macros"]
