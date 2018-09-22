@@ -1,3 +1,7 @@
+//! Macros part of the stlog logging framework
+
+#![deny(warnings)]
+
 extern crate proc_macro;
 #[macro_use]
 extern crate quote;
@@ -8,6 +12,10 @@ use proc_macro::TokenStream;
 
 use syn::ItemStatic;
 
+/// An attribute to declare a global logger
+///
+/// This attribute can only be applied to `static` variables that implement the
+/// [`GlobalLog`](../stlog/trait.GlobalLog.html) trait.
 #[proc_macro_attribute]
 pub fn global_logger(args: TokenStream, input: TokenStream) -> TokenStream {
     let var = parse_macro_input!(input as ItemStatic);
