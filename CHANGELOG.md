@@ -5,7 +5,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [v0.3.1] - 2018-09-23
+## [v0.3.2] - 2018-09-23
+
+### Changed
+
+- Reduced the number of symbols required to keep track of the log levels. This
+  is technically a breaking change but versions v0.3.0 and v0.3.1 of stlog and
+  versions v0.2.0 and v0.2.1 have been yanked.
+
+### Fixed
+
+- Fixed the expansion of the `warn!` macro when used with the global logger.
+
+## [v0.3.1] - 2018-09-23 - YANKED
 
 ### Added
 
@@ -17,7 +29,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Render README on crates.io
 
-## [v0.3.0] - 2018-09-23
+## [v0.3.0] - 2018-09-23 - YANKED
 
 ### Added
 
@@ -65,7 +77,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/stlog/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/japaric/stlog/compare/v0.3.2...HEAD
+[v0.3.2]: https://github.com/japaric/stlog/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/japaric/stlog/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/stlog/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/japaric/stlog/compare/v0.1.0...v0.2.0

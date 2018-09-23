@@ -274,7 +274,7 @@ macro_rules! warn {
                 #[link_section = ".stlog.warn"]
                 static SYMBOL: u8 = 0;
 
-                $crate::GlobalLog::log(LOGGER &SYMBOL as *const u8 as usize as u8)
+                $crate::GlobalLog::log(LOGGER, &SYMBOL as *const u8 as usize as u8)
             }
         }
     };
