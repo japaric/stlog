@@ -22,6 +22,10 @@
 //!
 //! - `printf` style or any other kind of formatting
 //!
+//! # MSRV
+//!
+//! This crate compiles on stable Rust 1.30.0 and newer.
+//!
 //! # Known limitations
 //!
 //! - The current implementation only supports 256 different log strings. This restriction may be
@@ -71,7 +75,7 @@
 //!
 //! [`stcat`]: https://crates.io/crates/stcat
 //!
-//! # Example
+//! # Examples
 //!
 //! ## Local logger
 //!
