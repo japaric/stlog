@@ -29,9 +29,6 @@ release-max-level-info = []    # on: error, warning and info
 release-max-level-debug = []   # on: error, warning, info and debug
 release-max-level-trace = []   # on: all levels
 
-[build-dependencies]
-failure = "0.1.2"
-
 [dependencies]
 stlog-macros = { path = "macros", version = "0.1.0" }
 
