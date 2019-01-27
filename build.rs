@@ -1,8 +1,6 @@
-extern crate failure;
+use std::{env, fs::File, io::Write, path::PathBuf, error::Error};
 
-use std::{env, fs::File, io::Write, path::PathBuf};
-
-fn main() -> Result<(), failure::Error> {
+fn main() -> Result<(), Box<Error>> {
     // Put the linker script somewhere the linker can find it
     let out = PathBuf::from(env::var("OUT_DIR")?);
 
