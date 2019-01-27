@@ -28,7 +28,10 @@ release-max-level-trace = []
 
 [dependencies]
 stlog-macros = { path = "macros", version = "0.1.0" }
-void = "1.0.2"
+
+[dependencies.void]
+default-features = false
+version = "1.0.2"
 
 [workspace]
 members = ["macros"]
