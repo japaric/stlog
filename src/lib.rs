@@ -9,7 +9,7 @@
 //! - `O(1)` execution time. Logging a message of arbitrary size is done in a constant number of
 //! instructions.
 //!
-//! - `O(0)` memory usage. The messages are NOT stored in the target device memory.
+//! - `O(0)` memory usage. The messages are NOT stored in the target device memory (`.rodata`).
 //!
 //! - Supports different logging levels: error, warning, info, debug and trace, in decreasing level
 //! of severity. By default, the `dev` profile logs debug, and more severe, messages and the
@@ -31,8 +31,11 @@
 //! - The current implementation only supports 256 different log strings. This restriction may be
 //! lifted in the future.
 //!
-//! - The exact same string can't be used in two or more macro invocations. This restriction will be
-//! lifted when procedural macros that expand into expressions are allowed on stable.
+//! - The string should not contain the character `@`. Any text that follows this character will be
+//! discarded.
+//!
+//! - The exact same string can't be used in two or more macro invocations. Enabling the `spanned`
+//! Cargo feature removes this limitation.
 //!
 //! ``` ignore
 //! use stlog::{error, info};
@@ -149,6 +152,33 @@
 //! }
 //! ```
 //!
+//! # Cargo features
+//!
+//! ## `spanned`
+//!
+//! Enabling this feature adds variants of the macros, that include span information, under the
+//! `spanned` module. For example, `spanned::info!("Hello")` will log the string `"Hello, loc:
+//! src/main.rs:12"`, where `src/main.rs:12` is the location of the macro invocation.
+//!
+//! This feature depends on unstable `proc_macro` features and requires a nightly compiler.
+//!
+//! ## `[release-]max-level-{off,error,warning,info,debug,trace}`
+//!
+//! These features can be used to enable / disable logging levels at compile time.
+//!
+//! - `max-level-off` will disable all levels
+//! - `max-level-error` enables the error level and disables everything else
+//! - `max-level-warning` enables the error and warning levels and disables everything else
+//! - `max-level-info` enables the error, warning and info levels and disables everything else
+//! - `max-level-debug` enables everything but the trace level
+//! - `max-level-trace` enables all levels
+//!
+//! The `release-` prefixed features affect the release profile, while the other features only
+//! affect the dev profile.
+//!
+//! If none of these features are enabled the release profile enables the error, warning and info
+//! levels, and the dev profile additionally enables the debug level.
+//!
 //! # Troubleshooting
 //!
 //! ## Didn't pass `-Tstlog.x` to the linker
@@ -185,8 +215,28 @@
 #![deny(warnings)]
 
 extern crate stlog_macros;
+extern crate void;
 
 pub use stlog_macros::global_logger;
+use void::Void;
+
+#[cfg(feature = "spanned")]
+pub mod spanned;
+
+/// A logger that does nothing
+pub struct NullLogger;
+
+impl GlobalLog for NullLogger {
+    fn log(&self, _: u8) {}
+}
+
+impl Log for NullLogger {
+    type Error = Void;
+
+    fn log(&mut self, _: u8) -> Result<(), Void> {
+        Ok(())
+    }
+}
 
 /// A global version of the [`Log`](trait.Log) trait
 ///

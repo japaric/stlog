@@ -8,29 +8,27 @@ license = "MIT OR Apache-2.0"
 name = "stlog"
 readme = "README.md"
 repository = "https://github.com/japaric/stlog"
-version = "0.3.2"
+version = "0.3.3"
 
 [features]
-# these features control which log levels are enabled when debug-assertions are
-# ENABLED, which is the default for the dev profile
-max-level-off = []     # everything is disabled
-max-level-error = []   # on: error
-max-level-warning = [] # on: error and warning
-max-level-info = []    # on: error, warning and info
-max-level-debug = []   # on: error, warning, info and debug
-max-level-trace = []   # on: all levels
+max-level-off = []
+max-level-error = []
+max-level-warning = []
+max-level-info = []
+max-level-debug = []
+max-level-trace = []
+spanned = ["stlog-macros/spanned"]
 
-# likewise but when debug-assertions are DISABLED, which is the default for the
-# release profile
-release-max-level-off = []     # everything is disabled
-release-max-level-error = []   # on: error
-release-max-level-warning = [] # on: error and warning
-release-max-level-info = []    # on: error, warning and info
-release-max-level-debug = []   # on: error, warning, info and debug
-release-max-level-trace = []   # on: all levels
+release-max-level-off = []
+release-max-level-error = []
+release-max-level-warning = []
+release-max-level-info = []
+release-max-level-debug = []
+release-max-level-trace = []
 
 [dependencies]
 stlog-macros = { path = "macros", version = "0.1.0" }
+void = "1.0.2"
 
 [workspace]
 members = ["macros"]

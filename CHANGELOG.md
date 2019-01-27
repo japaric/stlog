@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- A `NullLogger` that implements both `Log` and `GlobalLog` but does nothing.
+
+- A `spanned` Cargo feature that adds variants of `error!`, etc. that include
+  span information. See crate level documentation for more details.
+
+- Documented that the MSRV of this crate is 1.30.0
+
 ## [v0.3.2] - 2018-09-23
 
 ### Changed
