@@ -80,7 +80,7 @@ pub fn error(input: TokenStream) -> TokenStream {
 #[cfg(feature = "spanned")]
 #[proc_macro]
 pub fn warning(input: TokenStream) -> TokenStream {
-    spanned::common(input, "warning")
+    spanned::common(input, "warn")
 }
 
 #[cfg(feature = "spanned")]
