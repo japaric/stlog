@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.3] - 2019-11-27
+
 ### Added
 
 - A `NullLogger` that implements both `Log` and `GlobalLog` but does nothing.
@@ -12,7 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - A `spanned` Cargo feature that adds variants of `error!`, etc. that include
   span information. See crate level documentation for more details.
 
-- Documented that the MSRV of this crate is 1.30.0
+- Documented that the MSRV of this crate is 1.31
 
 ## [v0.3.2] - 2018-09-23
 
@@ -86,7 +88,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial release
 
-[Unreleased]: https://github.com/japaric/stlog/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/japaric/stlog/compare/v0.3.3...HEAD
+[v0.3.3]: https://github.com/japaric/stlog/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://github.com/japaric/stlog/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/japaric/stlog/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/stlog/compare/v0.2.0...v0.3.0

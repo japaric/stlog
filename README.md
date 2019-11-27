@@ -5,7 +5,7 @@
 
 > Ultra lightweight logging framework for resource constrained devices
 
-## [Documentation](https://japaric.github.io/stlog/stlog/)
+## [Documentation](https://docs.rs/stlog/)
 
 ## License
 

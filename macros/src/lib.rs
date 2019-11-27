@@ -4,14 +4,10 @@
 #![deny(warnings)]
 
 extern crate proc_macro;
-#[macro_use]
-extern crate quote;
-#[macro_use]
-extern crate syn;
 
 use proc_macro::{Span, TokenStream};
-
-use syn::{spanned::Spanned, Error, ItemStatic};
+use quote::quote;
+use syn::{parse_macro_input, spanned::Spanned, Error, ItemStatic};
 
 #[cfg(feature = "spanned")]
 mod spanned;
