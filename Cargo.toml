@@ -3,6 +3,7 @@ authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["development-tools::debugging", "embedded", "no-std"]
 description = "Ultra lightweight logging framework for resource constrained devices"
 documentation = "https://japaric.github.io/stlog/stlog/"
+edition = "2018"
 keywords = ["ELF", "symtab"]
 license = "MIT OR Apache-2.0"
 name = "stlog"

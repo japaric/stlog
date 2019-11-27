@@ -3,6 +3,7 @@ authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["development-tools::debugging", "embedded", "no-std"]
 description = "Macros part of the stlog logging framework"
 documentation = "https://japaric.github.io/stlog/stlog_macros/"
+edition = "2018"
 keywords = ["log", "symtab", "ELF"]
 license = "MIT OR Apache-2.0"
 name = "stlog-macros"
@@ -13,11 +14,11 @@ version = "0.1.1"
 proc-macro = true
 
 [dependencies]
-quote = "0.6.8"
+quote = "1"
 
 [dependencies.syn]
 features = ["full"]
-version = "0.15.4"
+version = "1"
 
 [features]
 spanned = []

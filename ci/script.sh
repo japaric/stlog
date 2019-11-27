@@ -1,10 +1,10 @@
 set -euxo pipefail
 
 main() {
-    cargo check --target $TARGET
+    cargo check --target $T
 
     if [ $TRAVIS_RUST_VERSION = nightly ]; then
-        cargo check --features spanned --target $TARGET
+        cargo check --features spanned --target $T
     fi
 }
 
@@ -23,8 +23,8 @@ if [ -z ${TRAVIS_RUST_VERSION-} ]; then
     esac
 fi
 
-if [ -z ${TARGET-} ]; then
-    TARGET=$(rustc -Vv | grep host | cut -d ' ' -f2)
+if [ -z ${T-} ]; then
+    T=$(rustc -Vv | grep host | cut -d ' ' -f2)
 fi
 
 main

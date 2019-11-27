@@ -24,7 +24,8 @@
 //!
 //! # MSRV
 //!
-//! This crate compiles on stable Rust 1.30.0 and newer.
+//! This crate is guaranteed to compile on stable Rust 1.31 and up. It might compile on older
+//! versions but that may change in any new patch release.
 //!
 //! # Known limitations
 //!
@@ -85,8 +86,6 @@
 //! - Device side
 //!
 //! ```
-//! extern crate stlog;
-//!
 //! use stlog::{info, warn, Log};
 //!
 //! struct Logger {
@@ -211,11 +210,10 @@
 //!   = note: rust-lld: error: undefined symbol: stlog::GLOBAL_LOGGER
 //! ```
 
-#![no_std]
+#![deny(rust_2018_compatibility)]
+#![deny(rust_2018_idioms)]
 #![deny(warnings)]
-
-extern crate stlog_macros;
-extern crate void;
+#![no_std]
 
 pub use stlog_macros::global_logger;
 use void::Void;
