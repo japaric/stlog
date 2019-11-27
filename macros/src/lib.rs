@@ -44,24 +44,13 @@ pub fn global_logger(args: TokenStream, input: TokenStream) -> TokenStream {
     let ty = var.ty;
     let expr = var.expr;
 
-    // TODO use this when rust-lang/rust#54451 lands
-    // quote!(
-    //     #(#attrs)*
-    //     #vis static #ident: #ty = {
-    //         #[export_name = "stlog::GLOBAL_LOGGER"]
-    //         static __STLOGGER__: &stlog::GlobalLog = &#ident;
-
-    //         #expr
-    //     };
-    // ).into()
-
     quote!(
         #(#attrs)*
-        #vis static #ident: #ty = #expr;
+        #vis static #ident: #ty = {
+            #[export_name = "stlog::GLOBAL_LOGGER"]
+            static GLOBAL_LOGGER: &stlog::GlobalLog = &#ident;
 
-        #[export_name = "stlog::GLOBAL_LOGGER"]
-        pub static __STLOG_GLOBAL_LOGGER__: &(stlog::GlobalLog) = {
-            &#ident
+            #expr
         };
     )
     .into()
