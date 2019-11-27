@@ -28,7 +28,7 @@ release-max-level-debug = []
 release-max-level-trace = []
 
 [dependencies]
-stlog-macros = { path = "macros", version = "0.1.0" }
+stlog-macros = { path = "macros", version = "0.1.2" }
 
 [dependencies.void]
 default-features = false

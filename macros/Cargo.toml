@@ -8,7 +8,7 @@ keywords = ["log", "symtab", "ELF"]
 license = "MIT OR Apache-2.0"
 name = "stlog-macros"
 repository = "https://github.com/japaric/stlog"
-version = "0.1.1"
+version = "0.1.2"
 
 [lib]
 proc-macro = true
