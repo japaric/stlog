@@ -1,6 +1,10 @@
-extern crate stlog;
+#![cfg_attr(feature = "spanned", feature(proc_macro_hygiene))]
 
-use stlog::{error, global_logger, info, GlobalLog};
+#[cfg(feature = "spanned")]
+use stlog::spanned::{error, info, trace};
+#[cfg(not(feature = "spanned"))]
+use stlog::{error, info};
+use stlog::{global_logger, GlobalLog};
 
 struct Logger;
 
@@ -13,5 +17,7 @@ static LOGGER: Logger = Logger;
 
 fn main() {
     info!("Hello!");
+    #[cfg(feature = "spanned")]
+    trace!("Hello!");
     error!("Bye!");
 }
