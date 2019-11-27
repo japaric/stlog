@@ -1,9 +1,11 @@
 use proc_macro::{Span, TokenStream};
 
+use quote::quote;
 use syn::{
     parse::{self, Parse, ParseStream},
+    parse_macro_input,
     spanned::Spanned,
-    Error, Expr, Lit,
+    Error, Expr, Lit, Token,
 };
 
 fn add_span(mut ls: String) -> String {
